@@ -1,0 +1,138 @@
+---
+title: "Prediction"
+author: "Anton Shestakov"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(lspline)
+library(cowplot)
+library(boot)
+library(estimatr)
+library(huxtable)
+library(stargazer)
+library(modelsummary)
+rm(list=ls())
+setwd("C:/Users/Пользователь/Desktop/MA1y/Prediction with ML/Assignment 1")
+
+data_in <- "clean/"
+
+data_all <- read_csv(paste0(data_in,"Driver_or_sales_workers_and_truck_drivers.csv"),
+                     col_types = cols(.default = "?", 
+                                      state = "c"))
+
+```
+
+
+
+```{r data modification, include=FALSE}
+library(dplyr)
+data <- data_all %>%
+  mutate(
+    hhid = hhid,
+    weight = weight,
+    week_wage = earnwke,
+    working_hours_week = uhours,
+    hour_wage = earnwke / uhours,
+    lnhour_wage = log(earnwke / uhours),
+    
+    educ_hsless = ifelse(grade92 >= 31 & grade92 < 39, 1, 0),   # Not High School Graduate
+    educ_hsgrad = ifelse(grade92 == 39, 1, 0),                  # High School Graduate
+    educ_college = ifelse(grade92 >= 40 & grade92 < 43, 1, 0),  # College or Professional
+    educ_ba_plus = ifelse(grade92 >= 43, 1, 0),                 # BA, MA, or Doctorate
+
+    race_white = ifelse(race == 1, 1, 0),
+    race_black = ifelse(race == 2, 1, 0),
+    race_asian = ifelse(race == 4, 1, 0),
+    race_other = ifelse(race %in% c(3, 5, 6, 7), 1, 0),  # Other races
+
+    age2 = age^2,
+    age = age,
+
+    female = ifelse(sex == 2, 1, 0),  # 1 if Female, 0 if Male
+
+    marital_married = ifelse(marital >= 1 & marital < 4, 1, 0), # Married
+    marital_nonmarried = ifelse(marital > 4 & marital < 7, 1, 0), # Non-Married
+    marital_never = ifelse(marital == 7, 1, 0), # Never Married
+
+    child_1 = ifelse(ownchild == 1, 1, 0),
+    child_2 = ifelse(ownchild == 2, 1, 0),
+    child_3 = ifelse(ownchild == 3, 1, 0),
+    child_4plus = ifelse(ownchild >= 4, 1, 0)  # More than 3 children
+  )
+
+data <- data %>%
+  dplyr::select(hhid, weight, week_wage, working_hours_week, hour_wage, lnhour_wage,
+         educ_hsless, educ_hsgrad, educ_college, educ_ba_plus,
+         race_white, race_black, race_asian, race_other,
+         age, age2, female,
+         marital_married, marital_nonmarried, marital_never,
+         child_1, child_2, child_3, child_4plus)
+str(data)
+
+saveRDS(data, "data_modified.rds")
+
+```
+
+
+
+```{r regressions, echo=FALSE}
+data <- readRDS("data_modified.rds")
+
+library(estimatr)
+reg1 <- lm_robust(lnhour_wage ~ race_black + race_asian + race_other + female, 
+                  data = data, se_type = "HC1")
+
+
+reg2 <- lm_robust(lnhour_wage ~ race_black + race_asian + race_other + female + age + age2, data = data, se_type = "HC1")
+
+
+reg3 <- lm_robust(lnhour_wage ~ race_black + race_asian + race_other + female + age + age2 + marital_married + marital_nonmarried, data = data, se_type = "HC1")
+
+
+reg4 <- lm_robust(lnhour_wage ~ race_black + race_asian + race_other + female + age + age2 +  marital_married + marital_nonmarried + educ_hsgrad + educ_college + educ_ba_plus, data = data, se_type = "HC1")
+
+
+
+gm <-  c('R2' = 'R-squared (%)',
+              'se_type' = 'SE type')
+
+cm <- c('R2' = 'R-squared (%)',
+        'lspline(age, c(30, 40))2' = 'spline(age, c(20,30))',
+        '(Intercept)' = 'Constant')
+msummary(list(reg1, reg2, reg3, reg4),
+         fmt="%.3f",
+         gof_omit = 'DF|Deviance|Log.Lik.|F',
+         stars=TRUE,
+         coef_rename = cm,
+         #output = paste(output,"ch09_reg2-R.tex",sep="")
+         )
+
+saveRDS(reg1, "reg1_model.rds")
+saveRDS(reg2, "reg2_model.rds")
+saveRDS(reg3, "reg3_model.rds")
+saveRDS(reg4, "reg4_model.rds")
+
+
+```
+
+
+
+```{r cross validation, echo=FALSE}
+library(caTools)
+library(caret)
+
+data <- readRDS("data_modified.rds")
+
+five_fold_cv <- trainControl(method = "cv", number = 5, savePredictions = "final")
+
+cv_model <- train(lnhour_wage ~ race_black + race_asian + race_other + female,
+                  data = data,
+                  method = "lm",        
+                  trControl = five_fold_cv)  
+cv_model
+
+```
+
