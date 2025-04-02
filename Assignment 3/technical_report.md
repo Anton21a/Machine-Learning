@@ -31,7 +31,21 @@ Growth rates and changes in KPI were then analyzed. Dummy variables were created
 | growth_ln_extra_inc      | 1912       | 0            | 0.6        | 2.7        | −15.0   | 0.0         | 14.4       |
 | growth_ln_fixed_assets   | 13595      | 0            | 0.6        | 2.7        | −15.6   | 0.0         | 13.3       |
 | growth_ln_intang_assets  | 2547       | 0            | 0.0        | 1.9        | −12.3   | 0.0         | 13.9       |
-| growth_ln_inventories    | 11103      | 0            | −0
+| growth_ln_inventories    | 11103      | 0            | −0.1       | 3.1        | −14.6   | 0.0         | 13.5       |
+| growth_ln_liq_assets     | 15959      | 0            | 0.2        | 1.9        | −13.1   | 0.2         | 13.4       |
+| growth_ln_material_exp   | 16161      | 0            | 0.1        | 1.1        | −12.8   | 0.1         | 10.3       |
+| growth_ln_personnel_exp  | 15031      | 0            | 0.0        | 2.2        | −12.7   | 0.1         | 13.9       |
+| growth_ln_subscribed_cap | 504        | 0            | 0.1        | 0.5        | −9.3    | 0.0         | 8.0        |
+| growth_ln_tang_assets    | 13457      | 0            | 0.7        | 2.8        | −15.6   | 0.0         | 13.3       |
+| growth_ln_total_assets_bs| 16171      | 0            | 0.1        | 1.0        | −10.1   | 0.1         | 6.5        |
+| growth_ln_amort          | 13563      | 0            | 0.3        | 2.3        | −10.7   | 0.0         | 12.3       |
+| growth_ln_extra_exp      | 1390       | 0            | 0.1        | 2.1        | −13.4   | 0.0         | 13.3       |
+| diff_extra_profit_loss   | 4685       | 0            | 0.0        | 0.5        | −27.7   | 0.0         | 34.5       |
+| diff_inc_bef_tax         | 16163      | 0            | 0.4        | 4.1        | −91.1   | 0.0         | 126.8      |
+| diff_profit_loss_year    | 15919      | 0            | 0.4        | 3.9        | −91.3   | 0.0         | 126.5      |
+| diff_share_eq            | 16001      | 0            | −0.2       | 5.0        | −94.9   | 0.0         | 97.7       |
+| growth_rate              | 16100      | 0            | 1.8        | 43.9       | −1.0    | 0.1         | 5091.1     |
+| fast_growth              | 2          | 0            | 0.1        | 0.3        | 0.0     | 0.0         | 1.0        |
 
 
 ### Modelling
