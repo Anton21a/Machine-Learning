@@ -59,4 +59,4 @@ Then, the random forest classifier is also trained. The model uses the ranger en
 * .splitrule: set to "gini", which determines how nodes are split by minimizing the Gini impurity. This criterion favors splits that result in purer child nodes.
 * .min.node.size: defines the minimum number of observations that must exist in a terminal node. Values of 5 and 10 were tested, with smaller sizes allowing deeper trees that can capture more complex patterns, but at the risk of overfitting. 
 
-For each model—particularly X4, X5, LASSO, and RF—fold-wise AUC values are computed using ROC analysis. These are visualized with boxplots to show variation in AUC across folds. This provides insight into both average performance and stability.
+For each model—particularly X4, X5, LASSO, and RF fold-wise AUC values are computed using ROC analysis. These are visualized with boxplots to show variation in AUC across folds. This gives a visual understanding of the average distribution of the results of each model. 
