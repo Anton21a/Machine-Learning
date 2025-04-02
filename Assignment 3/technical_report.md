@@ -53,6 +53,10 @@ Each model employs 5 fold cross-validation method, so the dataset was split into
 
 In addition to standard logistic regression, a 'penalized' logistic regression with LASSO regularization is fit using the glmnet method with a grid of lambda values. The model is tuned using cross-validation to find the optimal penalty parameter. The coefficients for the best lambda are extracted and the RMSE results are added to the overall performance comparison.
 
-Then, the random forest classifier is also trained. The model uses the ranger engine with a grid search over key hyperparameters (mtry, min.node.size) and the same 5-fold CV framework. The chosen hyperparameters are not too heavy on the model, but at the same time they produce better predictions relative to previous models.
+Then, the random forest classifier is also trained. The model uses the ranger engine with a grid search over key hyperparameters (mtry, min.node.size) and the same 5-fold CV framework. The chosen hyperparameters are not too heavy on the model, but at the same time they produce better predictions relative to previous models:
+
+* .mtry: controls the number of variables randomly selected as candidates at each split. In the grid, values of 5, 10, and 15 were explored. A smaller .mtry increases model diversity by forcing trees to consider different subsets of features, which often helps reduce overfitting.
+* .splitrule: set to "gini", which determines how nodes are split by minimizing the Gini impurity. This criterion favors splits that result in purer child nodes.
+* .min.node.size: defines the minimum number of observations that must exist in a terminal node. Values of 5 and 10 were tested, with smaller sizes allowing deeper trees that can capture more complex patterns, but at the risk of overfitting. 
 
 For each model—particularly X4, X5, LASSO, and RF—fold-wise AUC values are computed using ROC analysis. These are visualized with boxplots to show variation in AUC across folds. This provides insight into both average performance and stability.
