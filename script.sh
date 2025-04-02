@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /path/to/your/repo
+cd ~/Desktop/MA1y/Prediction_with_ML/Machine-Learning || { echo "Папка не найдена"; exit 1; }
 
 git pull origin main
 
