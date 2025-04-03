@@ -1,3 +1,5 @@
+#### The main body of the work is available in pdf format in the Assignment 3 folder at this repository link: https://github.com/Anton21a/Machine-Learning.git
+
 ### Data Cleaning and Pre-processing  
 
 With the given specific of the assignment, the initial dataset was filtered to include only firms that were active in either 2012 or 2014. Thus, as an indicator of fast growing, the study employs the difference in value of the target variable between 2014 and 2012.
